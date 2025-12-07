@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FairyTales - Online Storybook Shop</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="hero">
+    <div class="hero__content">
+      <div class="logo">FairyTales</div>
+      <div class="language-switcher" aria-label="Language switcher">
+        <button data-lang="en" class="active">EN</button>
+        <button data-lang="it">IT</button>
+        <button data-lang="ru">RU</button>
+      </div>
+    </div>
+    <div class="hero__text">
+      <p class="eyebrow" data-i18n="eyebrow">Magical stories for curious minds</p>
+      <h1 data-i18n="headline">Mint & lavender online bookshop for bedtime tales</h1>
+      <p class="subhead" data-i18n="subhead">Pick charming fairy tales, choose a subscription, and let the magic arrive in your inbox.</p>
+      <div class="cta-group">
+        <button class="btn primary" id="shopNow" data-i18n="shop_now">Shop now</button>
+        <button class="btn ghost" id="reviewPrompt" data-i18n="leave_review">Leave a review</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="carousel-section" aria-label="Featured books">
+      <div class="section-header">
+        <h2 data-i18n="catalog">Featured Fairy Tales</h2>
+        <p data-i18n="catalog_hint">Swipe through our growing collection — add to cart with one tap.</p>
+      </div>
+      <div class="carousel" role="region" aria-roledescription="carousel" aria-label="Story carousel">
+        <button class="carousel__control" id="prevBook" aria-label="Previous book">‹</button>
+        <div class="carousel__track" id="carouselTrack">
+          <!-- Cards rendered by JS -->
+        </div>
+        <button class="carousel__control" id="nextBook" aria-label="Next book">›</button>
+      </div>
+    </section>
+
+    <section class="order-panel" aria-label="Cart summary">
+      <div class="cart">
+        <h3 data-i18n="cart_title">Your cart</h3>
+        <ul id="cartItems"></ul>
+        <div class="cart__summary">
+          <span data-i18n="cart_total">Total</span>
+          <strong id="cartTotal">$0.00</strong>
+        </div>
+        <button class="btn primary wide" id="checkoutBtn" data-i18n="checkout">Checkout</button>
+      </div>
+      <div class="info">
+        <h3 data-i18n="how_it_works">How it works</h3>
+        <ol>
+          <li data-i18n="step_select">Select your stories from the carousel.</li>
+          <li data-i18n="step_choose">Choose a 6 or 12 month subscription.</li>
+          <li data-i18n="step_pay">Pay securely via PayPal and receive updates by email.</li>
+        </ol>
+        <div class="secure-note">
+          <p data-i18n="secure_note_title">Security & anti-bot</p>
+          <p data-i18n="secure_note_body">Honeypot fields, server-side validation, and rate-limited APIs keep checkout safe.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal" id="checkoutModal" aria-hidden="true" role="dialog">
+    <div class="modal__content">
+      <button class="modal__close" aria-label="Close" data-close>×</button>
+      <h3 data-i18n="checkout">Checkout</h3>
+      <form id="checkoutForm">
+        <div class="form-grid">
+          <label>
+            <span data-i18n="first_name">First name</span>
+            <input name="firstName" required />
+          </label>
+          <label>
+            <span data-i18n="last_name">Last name</span>
+            <input name="lastName" required />
+          </label>
+          <label>
+            <span data-i18n="email">Email</span>
+            <input type="email" name="email" required />
+          </label>
+          <label>
+            <span data-i18n="address">Mailing address</span>
+            <input name="address" required />
+          </label>
+        </div>
+        <label>
+          <span data-i18n="comments">Comment</span>
+          <textarea name="comment" rows="3"></textarea>
+        </label>
+        <label>
+          <span data-i18n="subscription">Subscription</span>
+          <div class="subscription-options">
+            <label><input type="radio" name="subscription" value="6" checked /> <span data-i18n="sub_6">6 months — $25</span></label>
+            <label><input type="radio" name="subscription" value="12" /> <span data-i18n="sub_12">12 months — $45</span></label>
+          </div>
+        </label>
+        <input type="text" name="website" class="honeypot" aria-hidden="true" tabindex="-1" autocomplete="off" />
+        <div id="paypalButtonContainer" class="paypal-placeholder" data-i18n="paypal_placeholder">PayPal button will appear here.</div>
+        <button type="submit" class="btn primary wide" data-i18n="pay_now">Pay & send order</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal" id="reviewModal" aria-hidden="true" role="dialog">
+    <div class="modal__content">
+      <button class="modal__close" aria-label="Close" data-close>×</button>
+      <h3 data-i18n="review_title">Share your Amazon review</h3>
+      <p data-i18n="review_body">Leave a review and receive a bonus fairy tale by email.</p>
+      <form id="reviewForm">
+        <label>
+          <span data-i18n="email">Email</span>
+          <input type="email" name="email" required />
+        </label>
+        <label>
+          <span data-i18n="review_link">Amazon review link</span>
+          <input type="url" name="reviewLink" required />
+        </label>
+        <input type="text" name="website" class="honeypot" aria-hidden="true" tabindex="-1" autocomplete="off" />
+        <button class="btn primary wide" type="submit" data-i18n="send_review">Send</button>
+      </form>
+    </div>
+  </div>
+
+  <template id="bookCardTemplate">
+    <article class="card">
+      <img class="card__image" alt="" />
+      <div class="card__body">
+        <p class="card__label"></p>
+        <h3 class="card__title"></h3>
+        <p class="card__description"></p>
+        <p class="card__price"></p>
+        <button class="btn secondary add-to-cart" data-i18n="add_to_cart">Add to cart</button>
+      </div>
+    </article>
+  </template>
+
+  <script src="scripts.js"></script>
+</body>
+</html>
